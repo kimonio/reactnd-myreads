@@ -49,7 +49,9 @@ class BooksApp extends Component {
 				<Route
 					path="/search"
 					render={() => (
-						<SearchBooks/>
+						<SearchBooks
+							onUpdateBook={this.updateBook}
+						/>
 					)}
 				/>
 			</div>
