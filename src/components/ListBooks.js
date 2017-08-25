@@ -6,12 +6,12 @@ import Book from './Book';
 class ListBooks extends Component {
 
 	static propTypes = {
-		books: PropTypes.array.isRequired
+		books: PropTypes.array.isRequired,
+		onUpdateBook: PropTypes.func.isRequired
 	};
 
 	render() {
-
-		const {books} = this.props;
+		const {books, onUpdateBook} = this.props;
 
 		return (
 			<div className="list-books">
@@ -28,7 +28,7 @@ class ListBooks extends Component {
 										.filter(book => book.shelf === "currentlyReading")
 										.map(book => (
 										<li key={book.id}>
-											<Book book={book}/>
+											<Book book={book} onUpdateBook={onUpdateBook}/>
 										</li>
 									))}
 								</ol>
@@ -42,7 +42,7 @@ class ListBooks extends Component {
 										.filter(book => book.shelf === "wantToRead")
 										.map(book => (
 											<li key={book.id}>
-												<Book book={book}/>
+												<Book book={book} onUpdateBook={onUpdateBook}/>
 											</li>
 										))}
 								</ol>
@@ -56,7 +56,7 @@ class ListBooks extends Component {
 										.filter(book => book.shelf === "read")
 										.map(book => (
 											<li key={book.id}>
-												<Book book={book}/>
+												<Book book={book} onUpdateBook={onUpdateBook}/>
 											</li>
 										))}
 								</ol>

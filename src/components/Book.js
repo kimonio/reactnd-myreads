@@ -4,7 +4,15 @@ import PropTypes from 'prop-types';
 class Book extends Component {
 
 	static propTypes = {
-		book: PropTypes.object.isRequired
+		book: PropTypes.object.isRequired,
+		onUpdateBook: PropTypes.func.isRequired
+	};
+
+	handleShelfChange = (e) => {
+		e.preventDefault();
+		const {book, onUpdateBook} = this.props;
+		const shelf = e.target.value;
+		onUpdateBook(book, shelf);
 	};
 
 	render() {
@@ -19,7 +27,7 @@ class Book extends Component {
 						backgroundImage: `url(${book.imageLinks.thumbnail})`
 					}}></div>
 					<div className="book-shelf-changer">
-						<select defaultValue={book.shelf}>
+						<select onChange={this.handleShelfChange} defaultValue={book.shelf}>
 							<option value="none" disabled>Move to...</option>
 							<option value="currentlyReading">Currently Reading</option>
 							<option value="wantToRead">Want to Read</option>
