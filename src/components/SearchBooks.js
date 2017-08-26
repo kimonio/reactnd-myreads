@@ -16,31 +16,40 @@ class SearchBooks extends Component {
 	};
 
 	updateQuery = (query) => {
-		this.setState({query});
+		this.setState({query}, () => {
 
-		// Make a request to the search API if query length is greater than 0.
-		if (query.length > 0) {
-			this.searchBooks(query, 5);
-		}
-		else {
-			// If query is empty, clear the search results.
-			this.setState({query: '', books: []});
-		}
+			// Search books that match the query.
+			if (query.length > 0) {
+				this.searchBooks(query, 5)
+					.then(books => this.assignShelfToBooks(books))
+					.then(books => this.setState({books}))
+					.catch((err) => this.setState({books: []}));
+			}
+			else {
+				// If the query is empty, clear the search results.
+				this.setState({books: []});
+			}
+		});
+	};
+
+	assignShelfToBooks = (books) => {
+		return Promise.all(books.map(book => BooksAPI.get(book.id)));
 	};
 
 	searchBooks = (query, maxResults) => {
-
-		// Search for books that match the query.
-		BooksAPI.search(query, maxResults)
-			.then(books => {
-				// If there are no search results, clear the search results.
-				if (books.error === "empty query" || this.state.query.length === 0) {
-					this.setState({books: []});
-				}
-				else {
-					this.setState({books});
-				}
-			})
+		return new Promise((resolve, reject) => {
+			// Search for books that match the query.
+			BooksAPI.search(query, maxResults)
+				.then(books => {
+					// If there are no search results, clear the search results.
+					if (books.error === "empty query") {
+						reject(books.error);
+					}
+					else {
+						resolve(books);
+					}
+				})
+		})
 	};
 
 	displayBooks() {

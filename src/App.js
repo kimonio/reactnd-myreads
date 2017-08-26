@@ -14,11 +14,14 @@ class BooksApp extends Component {
 	};
 
 	componentDidMount() {
+		this.loadBooks()
+	}
+
+	loadBooks = () => {
 		BooksAPI.getAll().then(books => {
-			console.log(books);
 			this.setState({books});
 		});
-	}
+	};
 
 	updateBook = (book, shelf) => {
 		// Update the book with the books API.
@@ -30,7 +33,10 @@ class BooksApp extends Component {
 					{ ...b, shelf } :
 					// otherwise return original book
 					b)
-			}));
+			}), () => {
+				// Refresh the book list to reflect the changes of the update.
+				this.loadBooks();
+			});
 		});
 	};
 
